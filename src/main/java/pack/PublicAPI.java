@@ -25,12 +25,12 @@ public class PublicAPI {
 				requestWiFi(startIdx, startIdx+ interval-1);
 				System.out.println(startIdx + "~" + (startIdx+interval-1) +" added.");
 				startIdx +=interval;
-			} while(startIdx < wifiCount);
-			
+			} while(startIdx < wifiCount);			
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
 	public void requestWiFi(Integer reqStartIdx, Integer reqEndIdx) throws IOException {
 		StringBuilder urlBuilder = new StringBuilder("http://openapi.seoul.go.kr:8088"); /*URL*/
 		urlBuilder.append("/" +  URLEncoder.encode("4448524374657069383870435a7849","UTF-8") ); /*인증키 (sample사용시에는 호출시 제한됩니다.)*/
@@ -60,7 +60,6 @@ public class PublicAPI {
 		}
 		rd.close();
 		conn.disconnect();
-		//System.out.println(sb.toString());
 		
 		String json = sb.toString();
 		JsonElement element = JsonParser.parseString(json);
@@ -79,13 +78,6 @@ public class PublicAPI {
 		}
 		JsonArray wifiJsonArray = infoObject.get("row").getAsJsonArray();
 		
-		DBManager dbManager = new DBManager();
-		dbManager.connectDB();
-		if(!dbManager.isDBConnected()) {
-			System.out.println("Failed to connect DB. Cannot insert wifi data.");
-			return;
-		}
-		
 		ArrayList<WiFi> wifiJavaArray = new ArrayList<WiFi>();
 		for(int i=0; i<wifiJsonArray.size();i++) {
 			Gson gson = new Gson();
@@ -99,8 +91,7 @@ public class PublicAPI {
 						
 			wifiJavaArray.add(wifi);			
 		}
-		
-		dbManager.insertWiFiList(wifiJavaArray);
-		dbManager.closeDb();
+		WiFiData wifiData = new WiFiData();
+		wifiData.insertList(wifiJavaArray);
 	}
 }

@@ -10,8 +10,7 @@
 </head>
 <body>
 	<div id="comment">
-		<h3>와이파이를 가져오는 중입니다.</h3>
-		
+		<h3>와이파이를 가져오는 중입니다.</h3>		
 	</div>
 	<a href="Home.jsp">홈으로 가기</a>
 	<script type="text/javascript">
@@ -29,16 +28,11 @@
 		if (xhr.readyState==4 && xhr.status==200){
 			var xmlObj = xhr.responseXML;
 			var wifiCount = xmlObj.getElementsByTagName("wifiCount")[0].childNodes[0].nodeValue;
-			var str = "<h3>" + wifiCount + " 개의 Wifi 정보가 저장되었습니다. </h3>";
+			var timeTaken = xmlObj.getElementsByTagName("timeTaken")[0].childNodes[0].nodeValue;
+			var str = "<h3>" + wifiCount + " 개의 Wifi 정보가 저장되었습니다. "+ timeTaken + "ms </h3>";
 			document.getElementById("comment").innerHTML = str;
 		}
 	}
-	
-	
-	
-
 	</script>
-	
-	
 </body>
 </html>

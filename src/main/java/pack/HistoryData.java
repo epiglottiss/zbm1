@@ -25,9 +25,9 @@ public class HistoryData extends DBManager {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			closeDB();
 		}
-		closeDb();
-		
 		return arr;
 	}
 	
@@ -47,9 +47,9 @@ public class HistoryData extends DBManager {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			closeDB();
 		}
-			
-		closeDb();
 	}
 	
 	public History get(int id) {
@@ -62,17 +62,22 @@ public class HistoryData extends DBManager {
 			preparedStatement.setInt(1, id);
 			rs = preparedStatement.executeQuery();
 			
-			history.setId(rs.getInt("id"));
-			history.setSearch_date(rs.getString("search_date"));
-			history.setX_coord(rs.getDouble("x_coord"));
-			history.setY_coord(rs.getDouble("y_coord"));
-			
+			if(!rs.next()) {
+				history = null;
+			}
+			else {
+				history.setId(rs.getInt("id"));
+				history.setSearch_date(rs.getString("search_date"));
+				history.setX_coord(rs.getDouble("x_coord"));
+				history.setY_coord(rs.getDouble("y_coord"));
+			}			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			closeDB();
 		}
-		
-		closeDb();
+
 		return history;
 	}
 	
@@ -88,6 +93,44 @@ public class HistoryData extends DBManager {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			closeDB();
 		}
+	}
+	
+	public int getLastId() {
+		connectDB();
+		
+		String sql = "select id from History order by id desc limit 1;";
+		int id = 0;
+		try {
+			preparedStatement = dbCon.prepareStatement(sql);
+			rs = preparedStatement.executeQuery();
+			
+			id = rs.getInt(1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			closeDB();
+		}
+		return id;
+	}
+	
+	public int getAllCount() {
+		connectDB();
+		int count = 0;
+		String sql ="select count(*) from History;";
+		try {
+			preparedStatement = dbCon.prepareStatement(sql);
+			rs = preparedStatement.executeQuery();
+			count = rs.getInt(1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			closeDB();
+		}
+		return count;
 	}
 }

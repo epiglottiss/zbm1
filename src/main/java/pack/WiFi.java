@@ -37,7 +37,7 @@ public class WiFi {
 	String mang_type="";
 	
 	@SerializedName("X_SWIFI_CNSTC_YEAR")
-	String install_year;
+	String install_year="";
 	
 	@SerializedName("X_SWIFI_INOUT_DOOR")
 	String in_out_door="";
@@ -46,10 +46,10 @@ public class WiFi {
 	String wifi_environment="";
 	
 	@SerializedName("LAT")
-	double lat;
+	double lat = 0.;
 	
 	@SerializedName("LNT")
-	double lnt;
+	double lnt = 0.;
 	
 	@SerializedName("WORK_DTTM")
 	String work_date="";
